@@ -18,6 +18,7 @@ export default () => {
   };
 
   const formContainer = document.querySelector('.form-container');
+
   const formHTML = `
   <form id="registrationForm">
     <div class="form-group">
@@ -38,15 +39,15 @@ export default () => {
 
   const watchedState = onChange(state, (path) => {
     const selector = path.split('.')[1];
-    const input = document.querySelector(`[name=${selector}`);
+    const input = document.querySelector(`[name=${selector}]`);
     if (validateField(selector, state.values[selector]).length === 0) {
-      input.cassList.remove('is-invalid');
-      input.cassList.add('is-valid');
+      input.classList.remove('is-invalid');
+      input.classList.add('is-valid');
     } else {
-      input.cassList.remove('is-valid');
-      input.cassList.add('is-invalid');
+      input.classList.remove('is-valid');
+      input.classList.add('is-invalid');
     }
-    submit.disabled = true;
+    submit.disabled = state.errors.name.length !== 0 || state.errors.email.length !== 0;
   });
 
   form.addEventListener('input', (e) => {
