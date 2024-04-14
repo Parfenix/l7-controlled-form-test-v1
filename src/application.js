@@ -1,11 +1,12 @@
 import axios from 'axios';
 import onChange from 'on-change';
-
+// step 3
 const validateName = (name) => (name.trim().length ? [] : ['name cannot be empty']);
 const validateEmail = (email) => (/\w+@\w+/.test(email) ? [] : ['invalid email']);
 const validateField = (fieldName, data) => (fieldName === 'name' ? validateName(data) : validateEmail(data));
 
 export default () => {
+  // step 3
   const state = {
     values: {
       name: '',
@@ -16,7 +17,7 @@ export default () => {
       email: [],
     },
   };
-
+  // step 1
   const formContainer = document.querySelector('.form-container');
 
   const formHTML = `
@@ -33,10 +34,11 @@ export default () => {
   </form>
   `;
   formContainer.innerHTML = formHTML;
-
+  // step 2
   const form = document.querySelector('form');
+  // step 4
   const submit = document.querySelector('[type="submit"]');
-
+  // step 3
   const watchedState = onChange(state, (path) => {
     const selector = path.split('.')[1];
     const input = document.querySelector(`[name=${selector}]`);
@@ -47,9 +49,10 @@ export default () => {
       input.classList.remove('is-valid');
       input.classList.add('is-invalid');
     }
+    // step 4
     submit.disabled = state.errors.name.length !== 0 || state.errors.email.length !== 0;
   });
-
+    // step 3
   form.addEventListener('input', (e) => {
     e.preventDefault();
     const targetName = e.target.name;
@@ -57,7 +60,7 @@ export default () => {
     watchedState.values[targetName] = data;
     watchedState.errors[targetName] = validateField(targetName, data);
   });
-
+  // step 2
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     axios.post('/users', state.values)
